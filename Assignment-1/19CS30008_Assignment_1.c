@@ -21,10 +21,11 @@ Assignment 1
 #define BELOW_PLANE -1
 
 // Constants for the shape properties
-const float ROTATION_DELTA = 5.0;   // The angle by which the shape is rotated each time using the left and right arrow keys
-const float SCALE_DELTA = 0.1;      // The factor by which the shape is scaled each time using the up and down arrow keys
-const float SCALE_THRESHOLD = 0.1;  // The scale factor at which the shape appears at the other side of the plane
-const float SENSITIVITY = 0.4;      // The sensitivity of the mouse dragging motion, higher the value, greater the rotation
+const float ROTATION_DELTA = 5.0;    // The angle by which the shape is rotated each time using the left and right arrow keys
+const float SCALE_DELTA = 0.1;       // The factor by which the shape is scaled each time using the up and down arrow keys
+const float SCALE_THRESHOLD = 0.05;  // The scale factor at which the shape vanishes/appears at the other side of the plane
+const float SCALE_MIN = 0.1;         // The minimum scale factor for the shape
+const float SENSITIVITY = 0.4;       // The sensitivity of the mouse dragging motion, higher the value, greater the rotation
 
 const float PLANE_SIDE_LEN = 2.0;      // The side length of the square plane
 const float SPHERE_RADIUS = 0.25;      // The initial radius of the sphere
@@ -120,9 +121,11 @@ void specialKeys(int key, int x, int y) {
                 scale += SCALE_DELTA;
             } else {
                 scale -= SCALE_DELTA;
-                if (scale < SCALE_THRESHOLD) {  // If the scale becomes less than the threshold, change the side of the plane on which the shape appears
+                if (scale < -SCALE_THRESHOLD) {  // If the scale becomes less than -SCALE_THRESHOLD, change the side of the plane on which the shape appears
                     orientation *= -1;
-                    scale = SCALE_THRESHOLD;
+                    scale = SCALE_MIN;
+                } else if (scale < SCALE_THRESHOLD) {  // If the scale becomes less than SCALE_THRESHOLD, explicitly set it to 0, so that it vanishes
+                    scale = 0;
                 }
             }
             break;
@@ -130,9 +133,11 @@ void specialKeys(int key, int x, int y) {
             // If the shape is above the plane, decrease the scale, else increase the scale
             if (orientation == ABOVE_PLANE) {
                 scale -= SCALE_DELTA;
-                if (scale < SCALE_THRESHOLD) {  // If the scale becomes less than the threshold, change the side of the plane on which the shape appears
+                if (scale < -SCALE_THRESHOLD) {  // If the scale becomes less than -SCALE_THRESHOLD, change the side of the plane on which the shape appears
                     orientation *= -1;
-                    scale = SCALE_THRESHOLD;
+                    scale = SCALE_MIN;
+                } else if (scale < SCALE_THRESHOLD) {  // If the scale becomes less than SCALE_THRESHOLD, explicitly set it to 0, so that it vanishes
+                    scale = 0;
                 }
             } else {
                 scale += SCALE_DELTA;
