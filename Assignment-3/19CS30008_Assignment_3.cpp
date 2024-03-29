@@ -51,7 +51,7 @@ vector<Face> faces;       // The list of faces of the mesh
 void parseMeshFile(const char* filename) {
     ifstream file(filename);
     if (!file.is_open()) {
-        cout << "Error: Unable to open file " << filename << endl;
+        cout << "Error: Unable to open file: " << filename << endl;
         exit(1);
     }
 
@@ -278,7 +278,6 @@ void mouseMotion(int x, int y) {
 
         // Limit the rotation about the x-axis to -90 to 90 degrees
         // Otherwise, the scene will be flipped upside down
-
         if (rotationX > 90.0) {
             rotationX = 90.0;
         } else if (rotationX < -90.0) {
